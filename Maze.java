@@ -63,7 +63,6 @@ public class Maze{
         }
     }
 
-
     private void wait(int millis){
          try {
              Thread.sleep(millis);
@@ -72,36 +71,27 @@ public class Maze{
          }
      }
 
-
     public void setAnimate(boolean b){
-
         animate = b;
-
     }
-
 
     public void clearTerminal(){
-
         //erase terminal, go to top left of screen.
-
         System.out.println("\033[2J\033[1;1H");
-
     }
 
-
-
-
-
-
    /*Return the string that represents the maze.
-
      It should look like the text file with some characters replaced.
-
     */
     public String toString(){
-
-            return "WRITE THIS METHOD";
-
+      String ans = "";
+      for (int row = 0; row < maze.length; row ++){
+        for (int col = 0; col < maze[row].length; col ++){
+          ans += maze[row][col];
+        }
+        ans += "\n";
+      }
+      return ans;
     }
 
 
