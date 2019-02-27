@@ -1,31 +1,66 @@
 import java.util.*;
 import java.io.*;
 public class Maze{
-
-
     private char[][]maze;
     private boolean animate;//false by default
 
     /*Constructor loads a maze text file, and sets animate to false by default.
-
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
       '#' - Walls - locations that cannot be moved onto
       ' ' - Empty Space - locations that can be moved onto
       'E' - the location of the goal (exactly 1 per file)
-
       'S' - the location of the start(exactly 1 per file)
-
       2. The maze has a border of '#' around the edges. So you don't have to check for out of bounds!
-
-
       3. When the file is not found OR the file is invalid (not exactly 1 E and 1 S) then:
-
          throw a FileNotFoundException or IllegalStateException
-
     */
 
     public Maze(String filename) throws FileNotFoundException{
         //COMPLETE CONSTRUCTOR
+        File m = new File(filename);
+        animate = false;
+        int ecount = 0;
+        int scount = 0;
+        //This counts the number of rows and columns so that you can initialize
+        //the array
+        Scanner count = new Scanner(m);
+        int row = 0;
+        int col = 0;
+        while (count.hasNextLine()){
+          String temp = count.nextLine();
+          if (row == 0){
+            for (int i = 0; i < temp.length(); i ++){
+              col += 1;
+            }
+          }
+          row += 1;
+        }
+        count.close();
+
+        Scanner array = new Scanner(m);
+        char[][] maze = new char[row][col];
+        int r = 0;
+        //Loop through each row and add every char at each space
+        while (array.hasNextLine()){
+          String temp = array.nextLine();
+          for (int i = 0; i < col; i ++){
+            maze[r][i] = temp.charAt(i);
+            //If the char is S, add one to scount and if the char is E, add one
+            //to ecount
+            if (temp.substring(i,i+1).equals("S")){
+              scount ++;
+            }
+            if (temp.substring(i,i+1).equals("E")){
+              ecount ++;
+            }
+          }
+          r += 1;
+        }
+        array.close();
+
+        if (ecount != 1 || scount != 1){
+          throw new IllegalStateException();
+        }
     }
 
 
