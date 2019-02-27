@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 public class Maze{
     private char[][]maze;
-    private boolean animate;//false by default
+    private boolean animate; //false by default
 
     /*Constructor loads a maze text file, and sets animate to false by default.
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -94,22 +94,26 @@ public class Maze{
       return ans;
     }
 
-
-
     /*Wrapper Solve Function returns the helper function
-
       Note the helper function has the same name, but different parameters.
       Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
-
     */
     public int solve(){
-
             //find the location of the S.
-
-
+            //Srow and Scol store the row and col of S
+            int Srow = 0;
+            int Scol = 0;
+            for (int row = 0; row < maze.length; row ++){
+              for (int col = 0; col < maze[row].length; col ++){
+                if (maze[row][col] == 'S'){
+                  Srow = row;
+                  Scol = col;
+                  row = maze.length;
+                }
+              }
+            }
             //erase the S
-
-
+            maze[Srow][Scol] = '@';
             //and start solving at the location of the s.
 
             //return solve(???,???);
