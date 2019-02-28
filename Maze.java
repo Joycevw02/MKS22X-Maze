@@ -161,5 +161,10 @@ public class Maze{
       }
     }
 
+    //Remove the @ sign and replace with a .
+    private boolean remove(int row, int col){
+      
+    }
+
 
 }
