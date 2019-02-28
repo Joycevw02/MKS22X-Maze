@@ -163,7 +163,15 @@ public class Maze{
 
     //Remove the @ sign and replace with a .
     private boolean remove(int row, int col){
-      
+      //If it has an @ (meaning we have been there), replace it with a . and
+      //return true
+      if (maze[row][col] == '@'){
+        maze[row][col] = '.';
+        return true
+      }
+      else{
+        return false;
+      }
     }
 
 
