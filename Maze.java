@@ -145,7 +145,12 @@ public class Maze{
         }
         //COMPLETE SOLVE
 
+
         return -1; //so it compiles
+    }
+
+    private boolean mark(int row, int col){
+
     }
 
 
