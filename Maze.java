@@ -149,8 +149,16 @@ public class Maze{
         return -1; //so it compiles
     }
 
+    //Mark the locations where the we have been
     private boolean mark(int row, int col){
-
+      //If it is an empty space, replace the value with an @ and return true
+      if (maze[row][col] == ' '){
+        maze[row][col] = '@';
+        return true;
+      }
+      else{
+        return false;
+      }
     }
 
 
