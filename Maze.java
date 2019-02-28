@@ -3,7 +3,8 @@ import java.io.*;
 public class Maze{
     private char[][]maze;
     private boolean animate; //false by default
-
+    private int prevrow = 0;
+    private int prevcol = 0;
     /*Constructor loads a maze text file, and sets animate to false by default.
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
       '#' - Walls - locations that cannot be moved onto
@@ -136,7 +137,7 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col){ //you can add more parameters since this is private
+    private int solve(int row, int col, int ans){ //you can add more parameters since this is private
         //automatic animation! You are welcome.
         if(animate){
             clearTerminal();
@@ -144,33 +145,43 @@ public class Maze{
             wait(20);
         }
         //COMPLETE SOLVE
-
-
-        return -1; //so it compiles
+        if (maze[row][col] == 'E'){
+          return ans;
+        }
+        else if (ans > (maze.length * maze[0].length)){
+          return -1;
+        }
+        else if (maze[row][col] == '#' || maze[row][col] == '.'){
+          solve(prevrow,prevcol,ans - 1);
+        }
+        else if (maze[row][col] == '@'){
+          remove(row,col);
+          solve(prevrow,prevcol,ans - 1);
+        }
+        else{
+          mark(row,col);
+          solve(row + 1, col, ans + 1);
+          solve(row - 1 , col, ans + 1);
+          solve(row, col + 1, ans + 1);
+          solve(row, col - 1, ans + 1);
+        }
     }
 
     //Mark the locations where the we have been
-    private boolean mark(int row, int col){
-      //If it is an empty space, replace the value with an @ and return true
+    private void mark(int row, int col){
+      //If it is an empty space, replace the value with an @
       if (maze[row][col] == ' '){
         maze[row][col] = '@';
-        return true;
-      }
-      else{
-        return false;
+        prevrow = row;
+        prevcol = col;
       }
     }
 
     //Remove the @ sign and replace with a .
-    private boolean remove(int row, int col){
-      //If it has an @ (meaning we have been there), replace it with a . and
-      //return true
+    private void remove(int row, int col){
+      //If it has an @ (meaning we have been there), replace it with a .
       if (maze[row][col] == '@'){
         maze[row][col] = '.';
-        return true
-      }
-      else{
-        return false;
       }
     }
 
