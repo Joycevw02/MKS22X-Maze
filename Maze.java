@@ -3,8 +3,7 @@ import java.io.*;
 public class Maze{
     private char[][]maze;
     private boolean animate; //false by default
-    private int prevrow = 0;
-    private int prevcol = 0;
+    private int[] moves = {1,0,0,1,-1,0,0,-1};
     /*Constructor loads a maze text file, and sets animate to false by default.
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
       '#' - Walls - locations that cannot be moved onto
@@ -109,12 +108,11 @@ public class Maze{
             if (maze[row][col] == 'S'){
               Srow = row;
               Scol = col;
-              row = maze.length;
             }
           }
         }
         //erase the S
-        maze[Srow][Scol] = ' ';
+        maze[Srow][Scol] = '@';
         //and start solving at the location of the s.
         //return solve(???,???);
         return solve(Srow,Scol);
@@ -137,7 +135,7 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col, int ans){ //you can add more parameters since this is private
+    private int solve(int row, int col){ //you can add more parameters since this is private
         //automatic animation! You are welcome.
         if(animate){
             clearTerminal();
@@ -145,45 +143,63 @@ public class Maze{
             wait(20);
         }
         //COMPLETE SOLVE
-        if (maze[row][col] == 'E'){
-          return ans;
+        //Ans is -1 at the beginning
+        int ans = -1;
+        for (int i = 0; i < moves.length; i = i + 2){
+          //Set x to moves[i] and y to moves[i + 1] for future use
+          int x = moves[i];
+          int y = moves[i + 1];
+          //After running through the maze, if one of the combos results with the
+          //next move being a 'E', set ans to 0 and loop through the maze and count
+          //the amount of possible @'s there can be, then return the ans.
+          if (maze[row + x][col + y] == 'E'){
+            ans = 0;
+            for (int r = 0; r < maze.length; r ++){
+              for (int c = 0; c < maze[r].length; c ++){
+                if (maze[r][c] == '@'){
+                  ans ++;
+                }
+              }
+            }
+            return ans;
+          }
+          //If marking the spot is possible, set ans equal to solving for each
+          //possible move. If ans isn't negative one, add one to ans. If it was
+          //negative one, remove the @ and replace it with a .
+          if (mark(row + x, col + y)){
+            ans = solve(row + x, col + y);
+            if (ans != -1){
+              return ans ++;
+            }
+            else{
+              remove(row + x, col + y);
+            }
+          }
         }
-        else if (ans > (maze.length * maze[0].length)){
-          return -1;
-        }
-        else if (maze[row][col] == '#' || maze[row][col] == '.'){
-          solve(prevrow,prevcol,ans - 1);
-        }
-        else if (maze[row][col] == '@'){
-          remove(row,col);
-          solve(prevrow,prevcol,ans - 1);
-        }
-        else{
-          mark(row,col);
-          solve(row + 1, col, ans + 1);
-          solve(row - 1 , col, ans + 1);
-          solve(row, col + 1, ans + 1);
-          solve(row, col - 1, ans + 1);
-        }
+        return ans;
     }
 
     //Mark the locations where the we have been
-    private void mark(int row, int col){
+    private boolean mark(int row, int col){
       //If it is an empty space, replace the value with an @
       if (maze[row][col] == ' '){
         maze[row][col] = '@';
-        prevrow = row;
-        prevcol = col;
+        return true;
+      }
+      else{
+        return false;
       }
     }
 
     //Remove the @ sign and replace with a .
-    private void remove(int row, int col){
+    private boolean remove(int row, int col){
       //If it has an @ (meaning we have been there), replace it with a .
       if (maze[row][col] == '@'){
         maze[row][col] = '.';
+        return true;
+      }
+      else{
+        return false;
       }
     }
-
-
 }
