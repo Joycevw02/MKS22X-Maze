@@ -38,7 +38,7 @@ public class Maze{
         count.close();
 
         Scanner array = new Scanner(m);
-        char[][] maze = new char[row][col];
+        maze = new char[row][col];
         int r = 0;
         //Loop through each row and add every char at each space
         while (array.hasNextLine()){
